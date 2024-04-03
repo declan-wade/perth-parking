@@ -10,13 +10,19 @@ import {
   TableRow,
   TableCell,
   Chip,
-  Navbar, NavbarBrand, NavbarContent, NavbarItem, getKeyValue, Spinner
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  getKeyValue,
+  Spinner,
 } from "@nextui-org/react";
 import { Link } from "@nextui-org/react";
 
 export default function Home() {
   const [isLoading, setIsLoading] = React.useState(true);
   const [data, setData] = React.useState([]);
+  const liveData = ["Citiplace", "Concert Hall", "Council House", "Cultural Centre", "Elder Street", "Goderich Street", "His Majesty's", "Mayfair Street", "Pier Street", "Roe Street", "State Library", "Terrace Road"];
 
   async function handleGetData() {
     const response = await getData();
@@ -32,13 +38,12 @@ export default function Home() {
   return (
     <div>
       <Navbar isBordered>
-      <NavbarBrand>
-        <p className="font-bold text-inherit">CPP Tracker</p>
-      </NavbarBrand>
+        <NavbarBrand>
+          <p className="font-bold text-inherit">CPP Tracker</p>
+        </NavbarBrand>
       </Navbar>
-      <Table radius="none"
-      >
-        <TableHeader >
+      <Table radius="none">
+        <TableHeader>
           <TableColumn>Name</TableColumn>
           <TableColumn>Spaces</TableColumn>
           <TableColumn>Open?</TableColumn>
@@ -50,14 +55,42 @@ export default function Home() {
               {data.map((item: any) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.free_space}</TableCell>
                   <TableCell>
-                    <Chip className="capitalize" color={item.opennow ? "success" : "danger"} size="sm" variant="flat">
-                  {item.opennow ? "Open" : "Closed"}
-                </Chip>
+                    {liveData.includes(item.title) ? (
+                      <Chip
+                        className="capitalize border-none gap-1 text-default-600"
+                        color="success"
+                        variant="dot"
+                      >
+                        {item.free_space}
+                      </Chip>
+                    ) : (
+                      <Chip
+                        className="capitalize border-none gap-1 text-default-600"
+                        color="primary"
+                        variant="dot"
+                      >
+                        {item.free_space}
+                      </Chip>
+                    )}
                   </TableCell>
                   <TableCell>
-                    <Link isExternal href={`${item.url}`} showAnchorIcon size="sm">
+                    <Chip
+                      className="capitalize"
+                      color={item.opennow ? "success" : "danger"}
+                      size="sm"
+                      variant="flat"
+                    >
+                      {item.opennow ? "Open" : "Closed"}
+                    </Chip>
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      isExternal
+                      href={`${item.url}`}
+                      showAnchorIcon
+                      size="sm"
+                    >
                       Details
                     </Link>{" "}
                   </TableCell>
